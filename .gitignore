@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+~/Teacher-Content-Portal/src/main/resources/applicattion-dev.properties
