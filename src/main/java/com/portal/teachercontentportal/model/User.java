@@ -9,20 +9,20 @@ public class User {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false,unique = true) // this value cannot be null and should be unique
-    private String email;
+    private String teacherId;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
     private String role;
 
-    public User(String name, String password,String email,String role)
+    public User(String name, String password,String teacherId,String role)
     {
         this.name = name;
         this.password = password;
-        this.email = email;
+        this.teacherId = teacherId;
         this.role = role;
     }
-    
+
     // Getter Setter func
     public Long getId()
     {
@@ -40,13 +40,13 @@ public class User {
     {
         this.name = name;
     }
-    public String getEmail()
+    public String getTeacherId()
     {
-        return email;
+        return teacherId;
     }
-    public void setEmail(String email)
+    public void setTeacherId(String teacherId)
     {
-        this.email = email;
+        this.teacherId = teacherId;
     }
     public String getPassword()
     {
