@@ -9,7 +9,7 @@ public class User {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false,unique = true) // this value cannot be null and should be unique
-    private String teacherId;
+    private String userId;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
@@ -17,11 +17,11 @@ public class User {
     private Role role;
 
 
-    public User(String name, String password,String teacherId,Role role)
+    public User(String name, String password,String userId,Role role)
     {
         this.name = name;
         this.password = password;
-        this.teacherId = teacherId;
+        this.userId = userId;
         this.role = role;
     }
 
@@ -42,13 +42,13 @@ public class User {
     {
         this.name = name;
     }
-    public String getTeacherId()
+    public String getuserId()
     {
-        return teacherId;
+        return userId;
     }
-    public void setTeacherId(String teacherId)
+    public void setuserId(String userId)
     {
-        this.teacherId = teacherId;
+        this.userId = userId;
     }
     public String getPassword()
     {

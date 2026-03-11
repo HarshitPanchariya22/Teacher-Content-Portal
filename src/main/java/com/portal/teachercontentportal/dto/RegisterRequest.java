@@ -1,7 +1,7 @@
 package com.portal.teachercontentportal.dto;
 import com.portal.teachercontentportal.model.Role;
 public class RegisterRequest {
-    private String teacherId;
+    private String userId;
     private String password;
     private Role role;
 
