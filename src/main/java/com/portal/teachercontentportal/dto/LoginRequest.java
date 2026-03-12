@@ -1,29 +1,14 @@
 package com.portal.teachercontentportal.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class LoginRequest {
     private String userId;
     private String password;
-    public LoginRequest()
-    {
-    }
-
-    public String getUserId()
-    {
-        return userId;
-    }
-
-    public void setUserId(String userId)
-    {
-        this.userId=userId;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword()
-    {
-        this.password=password;
-    }
 }
