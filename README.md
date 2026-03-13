@@ -100,4 +100,5 @@ mvn spring-boot:run
 ```
 
 ---
-
+### Author
+Neel Shinde  | Harshit Panchariya
