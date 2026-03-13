@@ -1,4 +1,5 @@
-package com.portal.teachercontentportal.security;
+package com.portal.teachercontentportal.config;
+import com.portal.teachercontentportal.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
