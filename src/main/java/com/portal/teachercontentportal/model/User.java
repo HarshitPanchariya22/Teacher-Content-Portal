@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 @NoArgsConstructor
 @Setter
 @Getter
@@ -24,14 +24,6 @@ public class User {
     @Enumerated(EnumType.STRING) // added string enum type to role
     private Role role;
 
-
-    public User(String name, String password,String userId,Role role)
-    {
-//        this.name = name;
-        this.password = password;
-        this.userId = userId;
-        this.role = role;
-    }
 
     public User(String userId, String password, Role role) {
      this.userId=userId;

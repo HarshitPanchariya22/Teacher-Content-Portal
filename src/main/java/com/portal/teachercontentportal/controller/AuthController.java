@@ -8,7 +8,6 @@ import com.portal.teachercontentportal.model.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
     private final JwtUtil jwtUtil;
@@ -26,8 +25,7 @@ public class AuthController {
                 loginRequest.getPassword()
         );
         String token = jwtUtil.generateToken(
-                loginRequest.getUserId(),
-                loginRequest.getPassword()
+                loginRequest.getUserId()
         );
         return ResponseEntity.ok(new AuthResponse(token));
     }
