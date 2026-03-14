@@ -46,4 +46,3 @@ public class SecurityConfig {
 
     }
 }
-sudo mv Postman /opt/Postman
