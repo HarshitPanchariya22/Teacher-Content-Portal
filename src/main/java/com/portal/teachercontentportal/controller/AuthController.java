@@ -2,7 +2,7 @@ package com.portal.teachercontentportal.controller;
 
 import com.portal.teachercontentportal.dto.*;
 import com.portal.teachercontentportal.security.JwtUtil;
-import com.portal.teachercontentportal.service.UserService;
+import com.portal.teachercontentportal.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import com.portal.teachercontentportal.model.User;
 import org.springframework.web.bind.annotation.*;
@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private final UserService userService;
+    private final AuthService authService;
     private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService, JwtUtil jwtUtil) {
-        this.userService = userService;
+    public AuthController(AuthService authService, JwtUtil jwtUtil) {
+        this.authService = authService;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest)
     {
-        User user = userService.authenticateUser(
+        User user = authService.authenticateUser(
                 loginRequest.getUserId(),
                 loginRequest.getPassword()
         );

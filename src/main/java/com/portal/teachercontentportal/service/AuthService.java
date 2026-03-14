@@ -1,15 +1,14 @@
 package com.portal.teachercontentportal.service;
 import com.portal.teachercontentportal.model.User;
 import com.portal.teachercontentportal.repository.UserRepository;
-import org.jspecify.annotations.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 @Service
-public class UserService {
+public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // injecting the passwordEncoder object
-    public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder)
     {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
