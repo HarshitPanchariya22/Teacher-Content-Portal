@@ -84,7 +84,7 @@ Flow:
 ### Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/teacher-content-portal.git
+git clone https://github.com/neel-1414/Teacher-Content-Portal.git
 ```
 
 ### Navigate into project
