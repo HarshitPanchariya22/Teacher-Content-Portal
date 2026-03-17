@@ -21,7 +21,10 @@ public class JwtFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain chain) throws ServletException, IOException {
 
          final String path = request.getServletPath();
-        if(path.equals("/login")) {
+        if(path.equals("/login")||
+                path.startsWith("/pages/**") ||
+                path.startsWith("/css/**") ||
+                path.startsWith("/js/**")) {
             chain.doFilter(request, response);
             return;
         }

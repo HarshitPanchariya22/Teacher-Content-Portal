@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Content Portal - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/login.css" />
+</head>
+<body>
+<div class="card">
+    <h1>Teacher Content Portal</h1>
+    <p class="subtitle">Sign in to continue to your dashboard</p>
+
+    <form id="loginForm">
+        <div class="field">
+            <label for="userid">User ID</label>
+            <div class="input-wrap">
+                <input
+                        type="text"
+                        id="userid"
+                        name="userid"
+                        placeholder="Enter User ID"
+                        autocomplete="username"
+                        required
+                />
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter Password"
+                        autocomplete="current-password"
+                        required
+                />
+            </div>
+        </div>
+        <p id="error-message"></p>
+
+        <button class="btn" type="submit">Sign In</button>
+    </form>
+</div>
+
+<script src="../js/login.js"></script>
+</body>
+</html>

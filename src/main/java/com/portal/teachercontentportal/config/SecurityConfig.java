@@ -3,6 +3,8 @@ import com.portal.teachercontentportal.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +26,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer()
+    {
+        return  (web) -> web.ignoring().requestMatchers("/pages/**", "/css/**", "/js/**");
+    }
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception
     {
         http
@@ -31,7 +38,7 @@ public class SecurityConfig {
                 //disabled because only happens when user and server creates a session which is not the case for jwt
                 .authorizeHttpRequests(auth -> auth
 
-                                .requestMatchers("/login").permitAll()
+                                .requestMatchers( "/login").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/teacher/**").hasRole("TEACHER")
                                 .requestMatchers("/student/**").hasRole("STUDENT")
