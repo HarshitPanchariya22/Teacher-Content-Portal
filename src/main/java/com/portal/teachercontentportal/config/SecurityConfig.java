@@ -3,7 +3,6 @@ import com.portal.teachercontentportal.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -37,12 +36,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))// cross site request forging -> any website should not send request to.
                 //disabled because only happens when user and server creates a session which is not the case for jwt
                 .authorizeHttpRequests(auth -> auth
-
-                                .requestMatchers( "/login").permitAll()
+                                .requestMatchers("/login").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/users/**").hasRole("ADMIN")
-                                .requestMatchers("/teacher/**").hasRole("TEACHER")
-                                .requestMatchers("/student/**").hasRole("STUDENT")
+                                .requestMatchers("/content/delete/**").hasAnyRole("TEACHER", "ADMIN")
+                                .requestMatchers("/student/upload/**").hasRole("TEACHER")
 
                         .anyRequest().authenticated()
                 ) // every other request MUST be authenticated like for /courses /users
