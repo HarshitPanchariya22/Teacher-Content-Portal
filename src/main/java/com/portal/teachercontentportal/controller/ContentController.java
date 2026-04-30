@@ -3,6 +3,8 @@ package com.portal.teachercontentportal.controller;
 import com.portal.teachercontentportal.dto.ContentResponse;
 import com.portal.teachercontentportal.model.Content;
 import com.portal.teachercontentportal.service.ContentService;
+import com.portal.teachercontentportal.service.Extraction;
+import com.portal.teachercontentportal.service.HashService;
 import com.portal.teachercontentportal.service.S3Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,19 +19,24 @@ public class ContentController {
 
     private final ContentService contentService;
     private final S3Service s3Service;
-    public ContentController(ContentService contentService, S3Service s3Service)
+    private final Extraction extract;
+    private final HashService hashService;
+    public ContentController(ContentService contentService, S3Service s3Service,Extraction extraction, HashService hashService)
     {
         this.contentService = contentService;
         this.s3Service = s3Service;
+        this.extract = extraction;
+        this.hashService = hashService;
     }
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = "multipart/form-data")
     public ResponseEntity<Content> uploadContent(
             @RequestParam String title,
-            @RequestParam MultipartFile file,
+            @RequestParam("file") MultipartFile file,
             @RequestParam Long folderId
     )
     {
+
            Authentication auth= SecurityContextHolder.getContext().getAuthentication();
         String fileUrl = s3Service.fileUpload(file);
 

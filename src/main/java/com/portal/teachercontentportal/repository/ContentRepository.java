@@ -10,7 +10,6 @@ import java.util.List;
 public interface ContentRepository extends JpaRepository<Content, Long>{
     List<Content> findByUploadedBy(User user);
     List<Content> findAllByOrderByCreatedAtDesc();
-    List<Content> findByFolder_Id(Long folderId);
     List<Content> findByFolder(Folder folder);
     void deleteByFolder_Id(Long folderId);
 }

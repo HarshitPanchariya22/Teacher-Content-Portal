@@ -31,6 +31,8 @@ public class Content {
     @JoinColumn(name="folder_id")
     private Folder folder;
 
+
+
     public Content(){}
 
     public Content(String title,
