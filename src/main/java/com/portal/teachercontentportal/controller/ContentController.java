@@ -29,21 +29,20 @@ public class ContentController {
         this.hashService = hashService;
     }
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = "multipart/form-data")
     public ResponseEntity<Content> uploadContent(
             @RequestParam String title,
             @RequestParam("file") MultipartFile file,
             @RequestParam Long folderId
     )
     {
-        String text = extract.extractAndNormlaize(file);
-        String hash = hashService.generateHash(text);
+
            Authentication auth= SecurityContextHolder.getContext().getAuthentication();
         String fileUrl = s3Service.fileUpload(file);
 
         String userId = auth.getPrincipal().toString();
 
-        Content content = contentService.uploadContent(title, fileUrl, userId, folderId, hash);
+        Content content = contentService.uploadContent(title, fileUrl, userId, folderId);
         return ResponseEntity.ok(content);
     }
 

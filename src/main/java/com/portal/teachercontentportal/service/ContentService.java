@@ -25,7 +25,7 @@ public class ContentService {
         this.folderRepository=folderRepository;
     }
 
-    public Content uploadContent(String title, String fileUrl, String userId, Long folderId,String hash)
+    public Content uploadContent(String title, String fileUrl, String userId, Long folderId)
     {
         User user=userRepository.findByUserId(userId)
                 .orElseThrow(()->new RuntimeException("User not found"));
@@ -38,17 +38,13 @@ public class ContentService {
             throw new RuntimeException("Unauthorized");
         }
 
-        if(contentRepository.existsByHashVal(hash))
-        {
-            throw new RuntimeException("Plagiarism detected");
-        }
         Content content=new Content();
         content.setTitle(title);
         content.setFileUrl(fileUrl);
         content.setCreatedAt(LocalDateTime.now());
         content.setUploadedBy(user);
         content.setFolder(folder);
-        content.setHashVal(hash);
+
 
 
         return contentRepository.save(content);
