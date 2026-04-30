@@ -41,6 +41,7 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/content/**").hasAnyRole("TEACHER", "ADMIN")
                                 .requestMatchers("/student/**").hasAnyRole("STUDENT","TEACHER")
+                                .requestMatchers("/test/**").permitAll()
                         .anyRequest().authenticated()
                 ) // every other request MUST be authenticated like for /courses /users
 

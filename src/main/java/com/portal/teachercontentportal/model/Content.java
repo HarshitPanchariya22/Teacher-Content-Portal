@@ -31,6 +31,12 @@ public class Content {
     @JoinColumn(name="folder_id")
     private Folder folder;
 
+    @Column(columnDefinition = "TEXT")
+    private String extractedText;
+
+    @Column(unique = true)
+    private String hashVal;
+
     public Content(){}
 
     public Content(String title,

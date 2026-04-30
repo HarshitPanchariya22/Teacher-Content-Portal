@@ -13,4 +13,5 @@ public interface ContentRepository extends JpaRepository<Content, Long>{
     List<Content> findByFolder_Id(Long folderId);
     List<Content> findByFolder(Folder folder);
     void deleteByFolder_Id(Long folderId);
+    boolean existsByHashVal(String value);
 }
