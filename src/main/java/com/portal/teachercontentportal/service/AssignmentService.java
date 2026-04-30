@@ -62,10 +62,18 @@ public class AssignmentService {
         return assignmentRepository.findByFolder(folder);
     }
 
-    public Assignment getAssignmentById(Long assignmentId)
+    public Assignment getAssignmentById(Long assignmentId, String teacherUserId)
     {
-        return assignmentRepository.findById(assignmentId)
-                .orElseThrow(()->new RuntimeException("Assignment not found"));
+        User teacher = userRepository.findByUserId(teacherUserId)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+
+        if (!assignment.getCreatedBy().getId().equals(teacher.getId())) {
+            throw new RuntimeException("Unauthorized");
+        }
+        return assignment;
     }
 
     public List<Assignment> getAssignmentByTeacher(String teacherUserId)
