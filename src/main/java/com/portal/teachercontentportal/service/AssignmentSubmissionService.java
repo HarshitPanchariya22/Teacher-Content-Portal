@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,13 +20,24 @@ public class AssignmentSubmissionService {
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
+    private final Extraction extraction;
+    private final HashService hashService;
+    private final TfidfService tfidfService;
 
-    public AssignmentSubmissionService(AssignmentSubmissionRepository submissionRepository, AssignmentRepository assignmentRepository, UserRepository userRepository, S3Service s3Service)
+    public AssignmentSubmissionService(AssignmentSubmissionRepository submissionRepository,
+                                       AssignmentRepository assignmentRepository,
+                                       UserRepository userRepository, S3Service s3Service,
+                                       Extraction extraction,
+                                       HashService hashService,
+                                       TfidfService tfidfService)
     {
         this.submissionRepository=submissionRepository;
         this.assignmentRepository=assignmentRepository;
         this.userRepository=userRepository;
         this.s3Service=s3Service;
+        this.extraction = extraction;
+        this.hashService = hashService;
+        this.tfidfService = tfidfService;
     }
 
     public AssignmentSubmission submitAssignment(Long assignmentId, MultipartFile file, String studentUserId)
@@ -48,12 +60,43 @@ public class AssignmentSubmissionService {
         {
             throw new RuntimeException("Assignment already submitted!");
         }
+        String text = extraction.extractText(file);
+        String hash = hashService.generateHash(text);
+        if(submissionRepository.existsByhashValue(hash))
+        {
+            throw new RuntimeException("Duplicate Submission detected");
+        }
+        List<AssignmentSubmission>existingSubmission = submissionRepository.findByAssignment(assignment);
+        List<String>corpus = new ArrayList<>();
+        for(AssignmentSubmission s  : existingSubmission)
+        {
+            if(s.getExtractedText() != null)
+            {
+                corpus.add(s.getExtractedText());
+            }
+        }
+        double maxSimilarity = 0.0;
+        AssignmentSubmission bestMatch =null;
+        for(AssignmentSubmission s: existingSubmission)
+        {
+            if(s.getExtractedText() != null)continue;
+
+            double similarity = tfidfService.cosineSimilarity(text,s.getExtractedText(),corpus);
+            if(similarity>maxSimilarity) {
+                maxSimilarity = similarity;
+                bestMatch = s;
+            }
+        }
         String fileUrl= s3Service.fileUpload(file);
         AssignmentSubmission submission=new AssignmentSubmission();
         submission.setAssignment(assignment);
         submission.setStudent(student);
         submission.setFileUrl(fileUrl);
+        submission.setHash(hash);
+        submission.setExtractedText(text);
         submission.setSubmittedAt(LocalDateTime.now());
+        submission.setSimilarityScore(maxSimilarity);
+        submission.setMatchedWith(bestMatch);
         return submissionRepository.save(submission);
     }
     public List<AssignmentSubmission> getSubmissionForAssignment(Long assignmentId, String teacherUserId)
@@ -68,4 +111,6 @@ public class AssignmentSubmissionService {
         }
         return submissionRepository.findByAssignment(assignment);
     }
+
+
 }

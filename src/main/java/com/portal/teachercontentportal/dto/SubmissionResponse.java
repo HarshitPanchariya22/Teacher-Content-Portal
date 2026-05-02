@@ -11,4 +11,6 @@ public class SubmissionResponse {
     private String studentUserId;
     private String fileUrl;
     private LocalDateTime submittedAt;
+    private Double similarityScore;
+    private String matchedStudentID;
 }
