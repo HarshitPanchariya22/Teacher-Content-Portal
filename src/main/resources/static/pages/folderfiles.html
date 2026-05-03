@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Folder Files</title>
+    <title>Folder Details</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/folderfile.css">
 </head>
@@ -13,7 +13,7 @@
 <header>
     <div class="header-left">
         <h2>Folder Files</h2>
-        <p>View uploaded files inside folder</p>
+        <p>Manage content and assignments inside this folder</p>
     </div>
 
     <button class="logout" onclick="goBack()">Back</button>
@@ -23,61 +23,62 @@
 
     <div class="top-bar">
         <div>
-            <h3 id="folderTitle">Files</h3>
-            <p>Manage files in this folder</p>
+            <h3 id="folderTitle">Folder</h3>
+            <p>Select Content or Assignments to manage this folder</p>
         </div>
 
-        <button type="button" onclick="openUploadModal()">
-            Add File
-        </button>
+        <div class="top-actions">
+            <button type="button" onclick="openUploadModal()">Add File</button>
+            <button type="button" class="secondary-btn" onclick="openAssignmentModal()">Create Assignment</button>
+        </div>
     </div>
 
-    <div id="fileList"></div>
+    <div class="tabs">
+        <button class="tab-btn active" id="contentTabBtn" onclick="showTab('content')">Content</button>
+        <button class="tab-btn" id="assignmentTabBtn" onclick="showTab('assignments')">Assignments</button>
+    </div>
+
+    <div id="contentSection" class="section">
+        <div id="fileList"></div>
+    </div>
+
+    <div id="assignmentsSection" class="section hidden">
+        <div id="assignmentList"></div>
+    </div>
 
 </div>
 
 <!-- Upload Modal -->
 <div class="modal" id="uploadModal">
-
     <div class="modal-content">
-
         <h3>Upload File</h3>
 
-        <input
-                type="text"
-                id="fileName"
-                placeholder="Enter file name"
-        >
-
-        <input
-                type="file"
-                id="fileInput"
-        >
+        <input type="text" id="fileName" placeholder="Enter file name">
+        <input type="file" id="fileInput">
 
         <div class="modal-actions">
-
-            <button
-                    type="button"
-                    onclick="uploadFile()"
-            >
-                Upload
-            </button>
-
-            <button
-                    type="button"
-                    class="secondary-btn"
-                    onclick="closeUploadModal()"
-            >
-                Cancel
-            </button>
-
+            <button type="button" onclick="uploadFile()">Upload</button>
+            <button type="button" class="secondary-btn" onclick="closeUploadModal()">Cancel</button>
         </div>
-
     </div>
+</div>
 
+<!-- Assignment Modal -->
+<div class="modal" id="assignmentModal">
+    <div class="modal-content">
+        <h3>Create Assignment</h3>
+
+        <input type="text" id="assignmentTitle" placeholder="Assignment Title">
+        <textarea id="assignmentDescription" placeholder="Assignment Description"></textarea>
+        <input type="datetime-local" id="assignmentDueDate">
+
+        <div class="modal-actions">
+            <button type="button" onclick="createAssignment()">Create</button>
+            <button type="button" class="secondary-btn" onclick="closeAssignmentModal()">Cancel</button>
+        </div>
+    </div>
 </div>
 
 <script src="../js/folderfile.js"></script>
-
 </body>
 </html>
