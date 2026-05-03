@@ -1,9 +1,9 @@
 let folderId = null;
+let currentTab = "content";
 
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
-
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -14,13 +14,13 @@ function init() {
     const params = new URLSearchParams(window.location.search);
     folderId = params.get("id");
 
-    console.log("Folder ID:", folderId);
-
     if (!folderId) {
         window.location.href = "../pages/teacherdashboard.html";
         return;
     }
 
+    loadFolderTitle();
+    showTab("content");
     loadFiles();
 }
 
@@ -28,8 +28,36 @@ function goBack() {
     window.location.href = "../pages/teacherdashboard.html";
 }
 
-async function loadFiles() {
+function loadFolderTitle() {
+    const title = document.getElementById("folderTitle");
+    title.textContent = "Folder #" + folderId;
+}
 
+function showTab(tab) {
+    currentTab = tab;
+
+    const contentSection = document.getElementById("contentSection");
+    const assignmentsSection = document.getElementById("assignmentsSection");
+
+    const contentBtn = document.getElementById("contentTabBtn");
+    const assignmentBtn = document.getElementById("assignmentTabBtn");
+
+    if (tab === "content") {
+        contentSection.classList.remove("hidden");
+        assignmentsSection.classList.add("hidden");
+        contentBtn.classList.add("active");
+        assignmentBtn.classList.remove("active");
+        loadFiles();
+    } else {
+        contentSection.classList.add("hidden");
+        assignmentsSection.classList.remove("hidden");
+        assignmentBtn.classList.add("active");
+        contentBtn.classList.remove("active");
+        loadAssignments();
+    }
+}
+
+async function loadFiles() {
     const res = await fetch("/folders/files/" + folderId, {
         headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
@@ -47,7 +75,6 @@ async function loadFiles() {
 }
 
 function renderFiles(files) {
-
     const list = document.getElementById("fileList");
 
     if (!files || files.length === 0) {
@@ -62,14 +89,13 @@ function renderFiles(files) {
 
     list.innerHTML = files.map(file => `
         <div class="file-row">
-            <div>${file.title}</div>
+            <div>
+                <div class="item-title">${file.title}</div>
+            </div>
 
             <div class="file-actions">
                 <a href="${file.fileUrl}" target="_blank">View</a>
-
-                <button onclick="deleteFile(${file.id})">
-                    Delete
-                </button>
+                <button onclick="deleteFile(${file.id})">Delete</button>
             </div>
         </div>
     `).join("");
@@ -81,10 +107,11 @@ function openUploadModal() {
 
 function closeUploadModal() {
     document.getElementById("uploadModal").style.display = "none";
+    document.getElementById("fileName").value = "";
+    document.getElementById("fileInput").value = "";
 }
 
 async function uploadFile() {
-
     const title = document.getElementById("fileName").value.trim();
     const file = document.getElementById("fileInput").files[0];
 
@@ -112,23 +139,15 @@ async function uploadFile() {
     });
 
     if (res.ok) {
-
         closeUploadModal();
-
-        document.getElementById("fileName").value = "";
-        document.getElementById("fileInput").value = "";
-
         alert("Upload successful");
-
         loadFiles();
-
     } else {
         alert("Upload failed");
     }
 }
 
 async function deleteFile(id) {
-
     const ok = confirm("Delete this file?");
     if (!ok) return;
 
@@ -146,11 +165,133 @@ async function deleteFile(id) {
     }
 }
 
-window.onclick = function(e) {
+async function loadAssignments() {
+    const res = await fetch("/teacher/assignments/folder/" + folderId, {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+        }
+    });
 
-    const modal = document.getElementById("uploadModal");
+    if (res.status === 401 || res.status === 403) {
+        localStorage.removeItem("token");
+        window.location.href = "../pages/login.html";
+        return;
+    }
 
-    if (e.target === modal) {
+    const assignments = await res.json();
+    renderAssignments(assignments);
+}
+
+function renderAssignments(assignments) {
+    const list = document.getElementById("assignmentList");
+
+    if (!assignments || assignments.length === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <h3>No assignments found</h3>
+                <p>Create your first assignment for this folder.</p>
+            </div>
+        `;
+        return;
+    }
+
+    list.innerHTML = assignments.map(a => `
+        <div class="assignment-card">
+            <div class="assignment-info">
+                <h4>${a.title}</h4>
+                <p>${a.description}</p>
+                <div class="assignment-meta">
+                    <span>Due: ${a.dueDate ? new Date(a.dueDate).toLocaleString() : "No due date"}</span>
+                    <span class="status ${a.open ? "open" : "closed"}">
+                        ${a.open ? "Open" : "Closed"}
+                    </span>
+                </div>
+            </div>
+
+            <div class="assignment-actions">
+                <button onclick="toggleAssignment(${a.id})">
+                    ${a.open ? "Close" : "Open"}
+                </button>
+                <button class="secondary-btn" onclick="viewSubmissions(${a.id})">
+                    View Submissions
+                </button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function openAssignmentModal() {
+    document.getElementById("assignmentModal").style.display = "flex";
+}
+
+function closeAssignmentModal() {
+    document.getElementById("assignmentModal").style.display = "none";
+    document.getElementById("assignmentTitle").value = "";
+    document.getElementById("assignmentDescription").value = "";
+    document.getElementById("assignmentDueDate").value = "";
+}
+
+async function createAssignment() {
+    const title = document.getElementById("assignmentTitle").value.trim();
+    const description = document.getElementById("assignmentDescription").value.trim();
+    const dueDate = document.getElementById("assignmentDueDate").value;
+
+    if (!title || !description) {
+        alert("Fill title and description");
+        return;
+    }
+
+    const res = await fetch("/teacher/assignments", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            title: title,
+            description: description,
+            folderId: folderId,
+            dueDate: dueDate ? dueDate : null
+        })
+    });
+
+    if (res.ok) {
+        closeAssignmentModal();
+        alert("Assignment created");
+        loadAssignments();
+    } else {
+        alert("Failed to create assignment");
+    }
+}
+
+async function toggleAssignment(id) {
+    const res = await fetch("/teacher/assignments/" + id + "/toggle", {
+        method: "PUT",
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+        }
+    });
+
+    if (res.ok) {
+        loadAssignments();
+    } else {
+        alert("Failed to update assignment");
+    }
+}
+
+function viewSubmissions(id) {
+    window.location.href = "../pages/submissions.html?assignmentId=" + id;
+}
+
+window.onclick = function (e) {
+    const uploadModal = document.getElementById("uploadModal");
+    const assignmentModal = document.getElementById("assignmentModal");
+
+    if (e.target === uploadModal) {
         closeUploadModal();
+    }
+
+    if (e.target === assignmentModal) {
+        closeAssignmentModal();
     }
 };
