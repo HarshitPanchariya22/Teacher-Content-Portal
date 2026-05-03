@@ -38,14 +38,22 @@ public class AssignmentSubmissionController {
     public ResponseEntity<List<SubmissionResponse>> getSubmissions(@PathVariable Long assignmentId, Authentication authentication)
     {
         String teacherUserId=authentication.getName();
-        List<AssignmentSubmission> submissions=submissionService.getSubmissionForAssignment(assignmentId, teacherUserId);
+        List<SubmissionResponse> submissions=submissionService.getSubmissionForAssignment(assignmentId, teacherUserId);
 
-        List<SubmissionResponse> response=submissions.stream().map(this::toSubmissionResponse).toList();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(submissions);
     }
 
     private SubmissionResponse toSubmissionResponse(AssignmentSubmission submission)
     {
-        return new SubmissionResponse(submission.getId(), submission.getStudent().getUserId(), s3Service.generatePresignedUrl(submission.getFileUrl()), submission.getSubmittedAt());
+        return new SubmissionResponse(submission.getId(),
+                submission.getStudent().getUserId(),
+                s3Service.generatePresignedUrl(submission.getFileUrl()),
+                submission.getSubmittedAt(),
+                submission.getSimilarityScore() != null
+                        ? Math.round(submission.getSimilarityScore() * 100)
+                        : 0.0,
+                submission.getMatchedWith() != null
+                        ? submission.getMatchedWith().getStudent().getUserId()
+                        : null);
     }
 }

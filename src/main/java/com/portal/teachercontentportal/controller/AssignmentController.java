@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teacher/assignments")
+@RequestMapping("/folders/assignment")
 public class AssignmentController {
     private final AssignmentService assignmentService;
     public AssignmentController(AssignmentService assignmentService)
@@ -19,7 +19,7 @@ public class AssignmentController {
         this.assignmentService=assignmentService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Assignment> createAssignment(@RequestBody AssignmentRequest request, Authentication authentication)
     {
         String teacherUserId=authentication.getName();
@@ -40,7 +40,7 @@ public class AssignmentController {
         return ResponseEntity.ok(assignmentService.getAssignmentByTeacher(teacherUserId));
     }
 
-    @GetMapping("/folder/{folderId}")
+    @GetMapping("/{folderId}")
     public ResponseEntity<List<Assignment>> getAssignmentsByFolder(@PathVariable Long folderId, Authentication authentication)
     {
         String teacherUserId=authentication.getName();

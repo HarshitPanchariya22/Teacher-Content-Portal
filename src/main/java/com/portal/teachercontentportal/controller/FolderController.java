@@ -19,7 +19,7 @@ import java.util.List;import com.portal.teachercontentportal.service.S3Service;
 
 @RestController
 @RequestMapping("/folders")
-public class FolderController {
+public class FolderController{
     private final FolderRepository folderRepository;
     private final UserRepository userRepository;
     private final ContentRepository contentRepository;

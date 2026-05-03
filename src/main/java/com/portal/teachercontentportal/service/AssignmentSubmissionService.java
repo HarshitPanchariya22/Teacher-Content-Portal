@@ -1,5 +1,6 @@
 package com.portal.teachercontentportal.service;
 
+import com.portal.teachercontentportal.dto.SubmissionResponse;
 import com.portal.teachercontentportal.model.User;
 import com.portal.teachercontentportal.model.Folder;
 import com.portal.teachercontentportal.model.Assignment;
@@ -99,7 +100,7 @@ public class AssignmentSubmissionService {
         submission.setMatchedWith(bestMatch);
         return submissionRepository.save(submission);
     }
-    public List<AssignmentSubmission> getSubmissionForAssignment(Long assignmentId, String teacherUserId)
+    public List<SubmissionResponse> getSubmissionForAssignment(Long assignmentId, String teacherUserId)
     {
         User teacher=userRepository.findByUserId(teacherUserId)
                 .orElseThrow(()->new RuntimeException("Teacher not found"));
@@ -109,7 +110,15 @@ public class AssignmentSubmissionService {
         {
             throw new RuntimeException("Unauthorized");
         }
-        return submissionRepository.findByAssignment(assignment);
+        List<AssignmentSubmission> submissions = submissionRepository.findByAssignment(assignment);
+        return submissions.stream().map(sub -> {
+            SubmissionResponse s = new SubmissionResponse(sub.getId(),
+                    sub.getStudent().getUserId(),
+                    sub.getFileUrl(),sub.getSubmittedAt(),
+                    sub.getSimilarityScore()!=null?Math.round(sub.getSimilarityScore()*10):0.0,
+                    sub.getMatchedWith()!= null?sub.getMatchedWith().getStudent().getUserId():null);
+            return s;
+        }).toList();
     }
 
 
