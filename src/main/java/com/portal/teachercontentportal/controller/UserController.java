@@ -2,9 +2,11 @@ package com.portal.teachercontentportal.controller;
 
 import com.portal.teachercontentportal.model.User;
 import com.portal.teachercontentportal.service.UserService;
+import com.portal.teachercontentportal.dto.CsvImportResult;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -36,5 +38,12 @@ public class UserController {
     {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
+    }
+
+    @PostMapping("/import-teachers")
+    public ResponseEntity<CsvImportResult> importTeachers(@RequestParam("file") MultipartFile file)
+    {
+        CsvImportResult result=userService.importTeachersFromCsv(file);
+        return ResponseEntity.ok(result);
     }
 }
