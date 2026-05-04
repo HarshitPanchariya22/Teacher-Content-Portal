@@ -3,7 +3,6 @@ package com.portal.teachercontentportal.controller;
 import com.portal.teachercontentportal.dto.AssignmentRequest;
 import com.portal.teachercontentportal.model.Assignment;
 import com.portal.teachercontentportal.service.AssignmentService;
-import org.hibernate.dialect.function.array.AbstractArrayTrimFunction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -40,14 +39,14 @@ public class AssignmentController {
         return ResponseEntity.ok(assignmentService.getAssignmentByTeacher(teacherUserId));
     }
 
-    @GetMapping("/{folderId}")
+    @GetMapping("/folder/{folderId}")
     public ResponseEntity<List<Assignment>> getAssignmentsByFolder(@PathVariable Long folderId, Authentication authentication)
     {
         String teacherUserId=authentication.getName();
         return ResponseEntity.ok(assignmentService.getAssignmentsByFolder(folderId, teacherUserId));
     }
 
-    @GetMapping("/{assignmentId}")
+    @GetMapping("/id/{assignmentId}")
     public ResponseEntity<Assignment> getAssignmentById(@PathVariable Long assignmentId, Authentication authentication)
     {
         String teacherUserId=authentication.getName();

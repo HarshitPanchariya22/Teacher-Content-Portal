@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Submissions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/submissions.css">
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <h2>Assignment Submissions</h2>
+        <p>Review student uploads and plagiarism signals.</p>
+    </div>
+    <button class="back-btn" onclick="goBack()">Back to Folder</button>
+</header>
+
+<div class="container">
+    <div class="card">
+        <div class="card-top">
+            <h3 id="assignmentTitle">Loading assignment...</h3>
+            <p id="assignmentDescription"></p>
+            <div class="meta">
+                <span class="pill" id="assignmentDueDate">Due date: -</span>
+                <span class="pill" id="submissionCount">Submissions: 0</span>
+            </div>
+        </div>
+        <div id="submissionsContainer"></div>
+    </div>
+</div>
+<script src="../js/submissions.js"></script>
+</body>
+</html>

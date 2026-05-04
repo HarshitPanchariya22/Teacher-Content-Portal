@@ -13,6 +13,6 @@ public interface AssignmentSubmissionRepository extends JpaRepository<Assignment
     boolean existsByAssignmentAndStudent(Assignment assignment, User student);
     List<AssignmentSubmission> findByAssignment(Assignment assignment);
     Optional<AssignmentSubmission> findByAssignmentAndStudent(Assignment assignment, User student);
-    boolean existsByhashValue(String hash);
+    boolean existsByhash(String hash);
 
 }

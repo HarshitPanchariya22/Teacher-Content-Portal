@@ -30,7 +30,6 @@ function goBack() {
 
 function loadFolderTitle() {
     const title = document.getElementById("folderTitle");
-    title.textContent = "Folder #" + folderId;
 }
 
 function showTab(tab) {
@@ -166,18 +165,40 @@ async function deleteFile(id) {
 }
 
 async function loadAssignments() {
-    const res = await fetch("/teacher/assignments/folder/" + folderId, {
+    const res = await fetch("/folders/assignment/folder/" + folderId, {
         headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
         }
     });
 
-    if (res.status === 401 || res.status === 403) {
+    if (res.status === 401) {
         localStorage.removeItem("token");
         window.location.href = "../pages/login.html";
         return;
     }
 
+    if (res.status === 403) {
+        const list = document.getElementById("assignmentList");
+        list.innerHTML = `
+            <div class="empty-state">
+                <h3>Access denied</h3>
+                <p>You are not allowed to view assignments for this folder.</p>
+            </div>
+        `;
+        return;
+    }
+
+    if (!res.ok) {
+        const list = document.getElementById("assignmentList");
+        list.innerHTML = `
+            <div class="empty-state">
+                <h3>Unable to load assignments</h3>
+                <p>Please try again in a moment.</p>
+            </div>
+        `;
+        return;
+    }
+    
     const assignments = await res.json();
     renderAssignments(assignments);
 }
@@ -241,7 +262,7 @@ async function createAssignment() {
         return;
     }
 
-    const res = await fetch("/teacher/assignments", {
+    const res = await fetch("/folders/assignment/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -265,7 +286,7 @@ async function createAssignment() {
 }
 
 async function toggleAssignment(id) {
-    const res = await fetch("/teacher/assignments/" + id + "/toggle", {
+    const res = await fetch("/folders/assignment/" + id + "/toggle", {
         method: "PUT",
         headers: {
             Authorization: "Bearer " + localStorage.getItem("token")

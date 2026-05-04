@@ -25,12 +25,16 @@ public class FolderController{
     private final ContentRepository contentRepository;
     private final S3Service s3Service;
     private final ContentService contentService;
-    public FolderController(FolderRepository folderRepository, UserRepository userRepository,ContentRepository contentRepository, ContentService contentService,S3Service s3Service)
+    public FolderController(FolderRepository folderRepository,
+                            UserRepository userRepository,
+                            ContentRepository contentRepository,
+                            ContentService contentService,
+                            S3Service s3Service)
     {
         this.contentRepository = contentRepository;
         this.folderRepository=folderRepository;
         this.userRepository=userRepository;
-        this.s3Service =  s3Service;
+        this.s3Service = s3Service;
         this.contentService=contentService;
     }
 
@@ -39,9 +43,7 @@ public class FolderController{
     {
         User teacher=userRepository.findByUserId(principal.getName())
                 .orElseThrow(()-> new RuntimeException("User not found"));
-
         folder.setTeacher(teacher);
-
         return folderRepository.save(folder);
     }
 
@@ -80,13 +82,8 @@ public class FolderController{
     @DeleteMapping("/{folderId}")
     public String deleteFolder(@PathVariable Long folderId, Principal principal)
     {
-        User teacher=userRepository.findByUserId(principal.getName())
-                .orElseThrow(()->new RuntimeException("User not found"));
-        Folder folder=folderRepository.findByIdAndTeacher(folderId, teacher)
-                .orElseThrow(()->new RuntimeException("Folder not found or unauthorized"));
-        contentService.deleteContentByFolder(folderId);
-        folderRepository.delete(folder);
-        return "folder deleted successfully";
+        contentService.DeleteFolder(folderId,principal.getName());
+        return "Folder deleted successfully";
     }
 
 

@@ -40,7 +40,6 @@ async function loadFolders() {
   }
 }
 
-/* ---------------- Render ---------------- */
 function renderFolders() {
   const list = document.getElementById("folderList");
 
@@ -94,13 +93,11 @@ function renderFolders() {
   `).join("");
 }
 
-/* ---------------- Open Files ---------------- */
 function openFiles(id) {
   window.location.href =
       "../pages/folderfiles.html?id=" + id;
 }
 
-/* ---------------- Create Folder ---------------- */
 function openFolderModal() {
   document.getElementById("folderModal").style.display = "flex";
 }
