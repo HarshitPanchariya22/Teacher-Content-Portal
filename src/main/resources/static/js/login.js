@@ -42,6 +42,10 @@ form.addEventListener("submit", async function(e){
         if(role == "TEACHER"){
         window.location.href = "../pages/teacherdashboard.html"
         }
+        else if(role=== "ADMIN")
+        {
+            window.location.href="../pages/admindashboard.html"
+        }
         else {
         window.location.href = "../pages/studentdashboard.html"
         }
