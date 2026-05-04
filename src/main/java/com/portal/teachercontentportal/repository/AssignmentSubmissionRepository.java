@@ -14,5 +14,6 @@ public interface AssignmentSubmissionRepository extends JpaRepository<Assignment
     List<AssignmentSubmission> findByAssignment(Assignment assignment);
     Optional<AssignmentSubmission> findByAssignmentAndStudent(Assignment assignment, User student);
     boolean existsByhash(String hash);
+    void deleteByAssignment(Assignment assignment);
 
 }

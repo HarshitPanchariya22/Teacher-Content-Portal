@@ -5,8 +5,8 @@
 body {
   margin: 0;
   font-family: "DM Sans", sans-serif;
-  background: linear-gradient(135deg, #f8fafc 0%, #edf2ff 100%);
-  color: #1f2937;
+  background: linear-gradient(135deg, #f6fbff 0%, #f7f9ff 100%);
+  color: #243447;
 }
 
 .page {
@@ -45,15 +45,15 @@ body {
 }
 
 .top-bar {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
   border-radius: 20px;
   padding: 22px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 26px rgba(30, 64, 175, 0.08);
+  border: 1px solid #dbeafe;
   margin-bottom: 20px;
 }
 
@@ -65,7 +65,7 @@ body {
 .top-bar p {
   margin: 6px 0 0;
   font-size: 14px;
-  color: #6b7280;
+  color: #5b7088;
 }
 
 button {
@@ -73,20 +73,20 @@ button {
   border: none;
   cursor: pointer;
   border-radius: 12px;
-  background: #2563eb;
+  background: #3b82f6;
   color: white;
   font-weight: 600;
   transition: all 0.2s ease;
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.2);
 }
 
 button:hover {
   transform: translateY(-1px);
-  background: #1d4ed8;
+  background: #2563eb;
 }
 
 button:focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.25);
+  outline: 3px solid rgba(59, 130, 246, 0.25);
   outline-offset: 2px;
 }
 
@@ -97,8 +97,8 @@ button:active {
 .content-panel {
   background: #ffffff;
   border-radius: 20px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06);
+  border: 1px solid #dbeafe;
+  box-shadow: 0 10px 28px rgba(30, 64, 175, 0.06);
   padding: 20px;
 }
 
@@ -117,36 +117,36 @@ button:active {
 
 .panel-title span {
   font-size: 13px;
-  color: #64748b;
+  color: #5b7088;
 }
 
 .logout {
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: none;
 }
 
 .logout:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .danger-btn {
-  background: #ef4444;
-  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.18);
+  background: #f97373;
+  box-shadow: 0 6px 18px rgba(249, 115, 115, 0.18);
 }
 
 .danger-btn:hover {
-  background: #dc2626;
+  background: #ef4444;
 }
 
 .secondary-btn {
-  background: #e5e7eb;
-  color: #111827;
+  background: #e0f2fe;
+  color: #1d4ed8;
   box-shadow: none;
 }
 
 .secondary-btn:hover {
-  background: #d1d5db;
+  background: #bae6fd;
 }
 
 /* Folder List */
@@ -164,8 +164,8 @@ button:active {
   grid-template-columns: 2fr auto;
   gap: 14px;
   align-items: center;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 22px rgba(59, 130, 246, 0.08);
+  border: 1px solid #dbeafe;
   transition: 0.2s ease;
   position: relative;
   overflow: hidden;
@@ -173,14 +173,14 @@ button:active {
 
 .folder-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.09);
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.12);
 }
 
 .folder-card::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 0%, rgba(37, 99, 235, 0.04) 55%, transparent 100%);
+  background: linear-gradient(120deg, transparent 0%, rgba(56, 189, 248, 0.12) 55%, transparent 100%);
   opacity: 0;
   transition: opacity 0.2s ease;
   pointer-events: none;
@@ -198,7 +198,7 @@ button:active {
 .folder-info p {
   margin: 0;
   font-size: 14px;
-  color: #6b7280;
+  color: #5b7088;
 }
 
 .folder-actions {
@@ -219,7 +219,7 @@ button:active {
 .status-text {
   font-size: 14px;
   font-weight: 600;
-  color: #16a34a;
+  color: #0f766e;
 }
 
 .switch {
@@ -239,7 +239,7 @@ button:active {
   position: absolute;
   inset: 0;
   cursor: pointer;
-  background: #cbd5e1;
+  background: #bfdbfe;
   border-radius: 999px;
   transition: 0.25s ease;
 }
@@ -257,7 +257,7 @@ button:active {
 }
 
 .switch input:checked + .slider {
-  background: #22c55e;
+  background: #2dd4bf;
 }
 
 .switch input:checked + .slider::before {
@@ -267,11 +267,11 @@ button:active {
 /* Empty State */
 .empty-state {
   background: white;
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed #bfdbfe;
   border-radius: 16px;
   padding: 28px;
   text-align: center;
-  color: #64748b;
+  color: #5b7088;
 }
 
 /* Modal */
@@ -279,7 +279,7 @@ button:active {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(30, 58, 138, 0.42);
   backdrop-filter: blur(6px);
   justify-content: center;
   align-items: center;
@@ -294,7 +294,7 @@ button:active {
   padding: 24px;
   border-radius: 20px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
-  border: 1px solid #e5e7eb;
+  border: 1px solid #dbeafe;
   animation: modalPop 0.2s ease;
 }
 
@@ -309,7 +309,7 @@ button:active {
 
 .modal-content p {
   margin: 0 0 18px;
-  color: #6b7280;
+  color: #5b7088;
 }
 
 input {
@@ -317,15 +317,15 @@ input {
   margin-bottom: 14px;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #bfdbfe;
   outline: none;
   font-size: 14px;
-  background: #f9fafb;
+  background: #f8fbff;
 }
 
 input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
   background: white;
 }
 
@@ -415,9 +415,9 @@ select {
   margin-bottom: 14px;   /* match input */
   padding: 12px 14px;   /* match input */
   border-radius: 12px;  /* match input */
-  border: 1px solid #d1d5db;
+  border: 1px solid #bfdbfe;
   font-size: 14px;
-  background: #f9fafb;
+  background: #f8fbff;
   font-family: "DM Sans", sans-serif;
   outline: none;
   appearance: none; /* remove default arrow (optional) */
@@ -425,7 +425,7 @@ select {
 
 /* Focus effect same as input */
 select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
   background: white;
 }

@@ -175,8 +175,26 @@ header{
 }
 
 .item-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
     font-weight:700;
     font-size:16px;
+}
+
+.item-title::before{
+    content:"";
+    width:28px;
+    height:28px;
+    border-radius:8px;
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    display:inline-block;
+    flex-shrink:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d4ed8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='16' y1='13' x2='8' y2='13'/%3E%3Cline x1='16' y1='17' x2='8' y2='17'/%3E%3Cpolyline points='10 9 9 9 8 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:16px 16px;
 }
 
 .file-row a{
@@ -382,6 +400,26 @@ header{
 
 .secondary-btn:hover{
     background:#d1d5db;
+}
+
+.delete-confirm-content{
+    max-width:460px;
+}
+
+.delete-confirm-text{
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.5;
+    margin-bottom:18px;
+}
+
+.danger-btn{
+    background:var(--danger) !important;
+    color:#fff !important;
+}
+
+.danger-btn:hover{
+    background:var(--danger-hover) !important;
 }
 
 @keyframes fadeInUp{

@@ -75,6 +75,17 @@
     </div>
 </div>
 
+<div class="modal" id="deleteConfirmModal">
+    <div class="modal-content delete-confirm-content">
+        <h3>Delete File?</h3>
+        <p class="delete-confirm-text">Do you want to delete this file? This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button type="button" class="danger-btn" onclick="confirmDeleteFile()">Delete</button>
+            <button type="button" class="secondary-btn" onclick="closeDeleteConfirmModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <script src="../js/folderfile.js"></script>
 </body>
 </html>

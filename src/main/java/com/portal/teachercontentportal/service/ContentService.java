@@ -1,9 +1,11 @@
 package com.portal.teachercontentportal.service;
 
 import com.portal.teachercontentportal.model.Content;
+import com.portal.teachercontentportal.model.Assignment;
 import com.portal.teachercontentportal.model.User;
 import com.portal.teachercontentportal.model.Folder;
 import com.portal.teachercontentportal.repository.AssignmentRepository;
+import com.portal.teachercontentportal.repository.AssignmentSubmissionRepository;
 import com.portal.teachercontentportal.repository.FolderRepository;
 import com.portal.teachercontentportal.repository.ContentRepository;
 import com.portal.teachercontentportal.repository.UserRepository;
@@ -22,16 +24,18 @@ public class ContentService {
     private final FolderRepository folderRepository;
     private final AssignmentRepository assignmentRepository;
     private  final S3Service s3Service;
+    private final AssignmentSubmissionRepository assignmentSubmissionRepository;
     public ContentService(ContentRepository contentRepository,
                           UserRepository userRepository,
                           FolderRepository folderRepository,
-                          AssignmentRepository assignmentRepository, S3Service s3Service)
+                          AssignmentRepository assignmentRepository, S3Service s3Service, AssignmentSubmissionRepository assignmentSubmissionRepository)
     {
         this.contentRepository=contentRepository;
         this.userRepository=userRepository;
         this.folderRepository=folderRepository;
         this.assignmentRepository = assignmentRepository;
         this.s3Service = s3Service;
+        this.assignmentSubmissionRepository = assignmentSubmissionRepository;
     }
 
     public Content uploadContent(String title, String fileUrl, String userId, Long folderId)
@@ -75,6 +79,7 @@ public class ContentService {
         {
             throw new RuntimeException("You are not allowed to delete this content");
         }
+        s3Service.deleteFile(content.getFileUrl());
         contentRepository.delete(content);
     }
 
@@ -99,6 +104,12 @@ public class ContentService {
         {
             s3Service.deleteFile(c.getFileUrl());
         }
+        List<Assignment> assignments = assignmentRepository.findByFolder(folder);
+        for(Assignment a : assignments)
+        {
+            assignmentSubmissionRepository.deleteByAssignment(a);
+        }
+
         assignmentRepository.deleteByFolderId(folderId);
         contentRepository.deleteByFolder_Id(folderId);
         folderRepository.delete(folder);
