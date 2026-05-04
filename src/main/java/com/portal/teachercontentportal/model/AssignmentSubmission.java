@@ -31,4 +31,14 @@ public class AssignmentSubmission {
 
     @Column(nullable = false)
     private LocalDateTime submittedAt;
+
+    @Column(columnDefinition = "TEXT")
+    private String extractedText;
+
+    private String hash;
+
+    private Double similarityScore;
+
+    @ManyToOne
+    private AssignmentSubmission matchedWith;
 }

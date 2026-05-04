@@ -3,6 +3,7 @@ package com.portal.teachercontentportal.service;
 import com.portal.teachercontentportal.model.Content;
 import com.portal.teachercontentportal.model.User;
 import com.portal.teachercontentportal.model.Folder;
+import com.portal.teachercontentportal.repository.AssignmentRepository;
 import com.portal.teachercontentportal.repository.FolderRepository;
 import com.portal.teachercontentportal.repository.ContentRepository;
 import com.portal.teachercontentportal.repository.UserRepository;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,11 +20,18 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final UserRepository userRepository;
     private final FolderRepository folderRepository;
-    public ContentService(ContentRepository contentRepository, UserRepository userRepository, FolderRepository folderRepository)
+    private final AssignmentRepository assignmentRepository;
+    private  final S3Service s3Service;
+    public ContentService(ContentRepository contentRepository,
+                          UserRepository userRepository,
+                          FolderRepository folderRepository,
+                          AssignmentRepository assignmentRepository, S3Service s3Service)
     {
         this.contentRepository=contentRepository;
         this.userRepository=userRepository;
         this.folderRepository=folderRepository;
+        this.assignmentRepository = assignmentRepository;
+        this.s3Service = s3Service;
     }
 
     public Content uploadContent(String title, String fileUrl, String userId, Long folderId)
@@ -37,15 +46,12 @@ public class ContentService {
         {
             throw new RuntimeException("Unauthorized");
         }
-
         Content content=new Content();
         content.setTitle(title);
         content.setFileUrl(fileUrl);
         content.setCreatedAt(LocalDateTime.now());
         content.setUploadedBy(user);
         content.setFolder(folder);
-
-
 
         return contentRepository.save(content);
     }
@@ -76,5 +82,25 @@ public class ContentService {
     public void deleteContentByFolder(Long folderId)
     {
         contentRepository.deleteByFolder_Id(folderId);
+    }
+
+    @Transactional
+    public void DeleteFolder(Long folderId, String userId)
+    {
+        Folder folder = folderRepository.findById(folderId).orElseThrow(()-> new RuntimeException("Folder not found"));
+        System.out.println("Logged in user: " + userId);
+        System.out.println("Folder owner: " + folder.getTeacher().getUserId());
+        if(!folder.getTeacher().getUserId().equalsIgnoreCase(userId))
+        {
+            throw new RuntimeException("Unauthorised to delete the folder");
+        }
+        List<Content>contents = contentRepository.findByFolder(folder);
+        for(Content c :contents)
+        {
+            s3Service.deleteFile(c.getFileUrl());
+        }
+        assignmentRepository.deleteByFolderId(folderId);
+        contentRepository.deleteByFolder_Id(folderId);
+        folderRepository.delete(folder);
     }
 }

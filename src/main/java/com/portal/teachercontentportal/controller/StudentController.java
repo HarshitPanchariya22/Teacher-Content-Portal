@@ -1,9 +1,13 @@
 package com.portal.teachercontentportal.controller;
 
 import com.portal.teachercontentportal.dto.ContentResponse;
+import com.portal.teachercontentportal.dto.StudentAssignmentResponse;
+import com.portal.teachercontentportal.model.Assignment;
 import com.portal.teachercontentportal.model.Content;
 import com.portal.teachercontentportal.model.Folder;
 import com.portal.teachercontentportal.model.User;
+import com.portal.teachercontentportal.repository.AssignmentRepository;
+import com.portal.teachercontentportal.repository.AssignmentSubmissionRepository;
 import com.portal.teachercontentportal.repository.ContentRepository;
 import com.portal.teachercontentportal.repository.FolderRepository;
 import com.portal.teachercontentportal.repository.UserRepository;
@@ -24,12 +28,16 @@ public class StudentController {
     private final ContentRepository contentRepository;
     private final S3Service s3Service;
     private final FolderRepository folderRepository;
+    private final AssignmentRepository assignmentRepository;
+    private final AssignmentSubmissionRepository assignmentSubmissionRepository;
 
-    public StudentController(UserRepository userRepository, ContentRepository contentRepository, FolderRepository folderRepository,S3Service s3Service) {
+    public StudentController(UserRepository userRepository, ContentRepository contentRepository, FolderRepository folderRepository, S3Service s3Service, AssignmentRepository assignmentRepository, AssignmentSubmissionRepository assignmentSubmissionRepository) {
         this.userRepository = userRepository;
         this.contentRepository = contentRepository;
         this.folderRepository = folderRepository;
         this.s3Service = s3Service;
+        this.assignmentRepository = assignmentRepository;
+        this.assignmentSubmissionRepository = assignmentSubmissionRepository;
     }
     @GetMapping("/folders")
     public List<Folder> getFolders()
@@ -72,6 +80,36 @@ public class StudentController {
                         s3Service.generatePresignedUrl(
                                 file.getFileUrl()
                         )
+                ))
+                .toList();
+    }
+
+    @GetMapping("/folders/{folderId}/assignments")
+    public List<StudentAssignmentResponse> getAssignments(@PathVariable Long folderId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userID = auth.getName();
+
+        User student = userRepository.findByUserId(userID)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Folder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new RuntimeException("Folder not found"));
+
+        if (!student.getYear().equals(folder.getYear()) ||
+                !student.getBranch().equals(folder.getBranch()) ||
+                !folder.isEnabled()) {
+            throw new RuntimeException("Access Denied");
+        }
+
+        List<Assignment> assignments = assignmentRepository.findByFolder(folder);
+        return assignments.stream()
+                .map(assignment -> new StudentAssignmentResponse(
+                        assignment.getId(),
+                        assignment.getTitle(),
+                        assignment.getDescription(),
+                        assignment.getDueDate(),
+                        assignment.isOpen(),
+                        assignmentSubmissionRepository.existsByAssignmentAndStudent(assignment, student)
                 ))
                 .toList();
     }
