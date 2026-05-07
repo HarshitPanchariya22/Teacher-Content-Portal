@@ -13,12 +13,12 @@
     <aside class="side-panel">
         <div class="brand">
             <h1>Admin Workspace</h1>
-            <p>Upload teacher CSV files and manage user creation securely.</p>
+            <p>Upload CSV files to create teacher and student accounts securely.</p>
         </div>
 
         <div class="side-card">
             <h3>CSV Format</h3>
-            <p>Use: <strong>userId,password</strong></p>
+            <p>Use: <strong>userId,password, role, year, branch</strong></p>
             <button class="secondary-btn full-btn" onclick="downloadTemplate()">
                 Download Template
             </button>
@@ -30,22 +30,22 @@
     <main class="container">
         <section class="top-bar">
             <div>
-                <h3>Teacher Import</h3>
-                <p>Upload a CSV file to create teacher accounts in bulk.</p>
+                <h3>User Import</h3>
+                <p>Upload a CSV file to create teacher and students accounts in bulk.</p>
             </div>
         </section>
 
         <section class="content-panel">
             <div class="panel-title">
                 <h4>CSV Upload</h4>
-                <span>Format: userId,password</span>
+                <span>Format: userId,password, role, year, branch</span>
             </div>
 
             <div class="upload-card">
                 <div class="upload-icon">CSV</div>
 
                 <div class="upload-text">
-                    <h3>Select teacher CSV file</h3>
+                    <h3>Select CSV file</h3>
                     <p>Only .csv files are allowed. Passwords will be hashed before storing.</p>
                 </div>
 
