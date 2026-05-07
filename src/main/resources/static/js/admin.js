@@ -15,13 +15,17 @@ function logout() {
 }
 
 function downloadTemplate() {
-    const csvContent = "userId,password\nteacher1,pass123\nteacher2,pass456\n";
+    // const csvContent = "userId,password, role, year, branch\nteacher1,pass123\nteacher2,pass456, STUDENT, FIRST, CSE\n";
+    const csvContent="userId, password, role, year, branch\n"+
+        "teacher1, pass123, TEACHER,,\n"+
+        "student1, pass456, STUDENT, FIRST, CSE\n"+
+        "student2, pass789, STUDENT, SECOND, IT\n";
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "teacher_template.csv";
+    a.download = "user_template.csv";
     a.click();
 
     URL.revokeObjectURL(url);
@@ -40,7 +44,7 @@ async function uploadCsv() {
     formData.append("file", file);
 
     try {
-        const response = await fetch("/admin/users/import-teachers", {
+        const response = await fetch("/admin/users/import-users", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
