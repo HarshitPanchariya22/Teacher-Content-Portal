@@ -76,12 +76,12 @@ public class AssignmentService {
         return assignment;
     }
 
-    public List<Assignment> getAssignmentByTeacher(String teacherUserId)
-    {
-        User teacher=userRepository.findByUserId(teacherUserId)
-                .orElseThrow(()-> new RuntimeException("Teacher not found"));
-        return assignmentRepository.findByCreatedBy(teacher);
-    }
+//    public List<Assignment> getAssignmentByTeacher(String teacherUserId)
+//    {
+//        User teacher=userRepository.findByUserId(teacherUserId)
+//                .orElseThrow(()-> new RuntimeException("Teacher not found"));
+//        return assignmentRepository.findByCreatedBy(teacher);
+//    }
 
     public Assignment toggleAssignmentStatus(Long assingmentId, String teacherUserId)
     {

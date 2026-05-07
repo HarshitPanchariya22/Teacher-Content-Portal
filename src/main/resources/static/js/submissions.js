@@ -58,7 +58,8 @@ async function loadSubmissions() {
         </div>
     `;
 
-    const res = await fetch("/folders/assignment/" + assignmentId + "/submissions", {
+    const res = await fetch("/folders" +
+        "/assignment/" + assignmentId + "/submissions", {
         headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
         }

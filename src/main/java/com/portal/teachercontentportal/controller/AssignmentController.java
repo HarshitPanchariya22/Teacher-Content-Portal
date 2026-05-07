@@ -32,12 +32,12 @@ public class AssignmentController {
         return ResponseEntity.ok(assignment);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Assignment>> getMyAssignments(Authentication authentication)
-    {
-        String teacherUserId=authentication.getName();
-        return ResponseEntity.ok(assignmentService.getAssignmentByTeacher(teacherUserId));
-    }
+//    @GetMapping
+//    public ResponseEntity<List<Assignment>> getMyAssignments(Authentication authentication)
+//    {
+//        String teacherUserId=authentication.getName();
+//        return ResponseEntity.ok(assignmentService.getAssignmentByTeacher(teacherUserId));
+//    }
 
     @GetMapping("/folder/{folderId}")
     public ResponseEntity<List<Assignment>> getAssignmentsByFolder(@PathVariable Long folderId, Authentication authentication)
@@ -46,6 +46,8 @@ public class AssignmentController {
         return ResponseEntity.ok(assignmentService.getAssignmentsByFolder(folderId, teacherUserId));
     }
 
+
+    //using it in Submissions of assignment
     @GetMapping("/id/{assignmentId}")
     public ResponseEntity<Assignment> getAssignmentById(@PathVariable Long assignmentId, Authentication authentication)
     {

@@ -166,7 +166,7 @@ async function confirmDeleteFile() {
             Authorization: "Bearer " + localStorage.getItem("token")
         }
     });
-
+IT
     if (res.ok) {
         closeDeleteConfirmModal();
         loadFiles();

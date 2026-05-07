@@ -93,8 +93,6 @@ public class ContentService {
     public void DeleteFolder(Long folderId, String userId)
     {
         Folder folder = folderRepository.findById(folderId).orElseThrow(()-> new RuntimeException("Folder not found"));
-        System.out.println("Logged in user: " + userId);
-        System.out.println("Folder owner: " + folder.getTeacher().getUserId());
         if(!folder.getTeacher().getUserId().equalsIgnoreCase(userId))
         {
             throw new RuntimeException("Unauthorised to delete the folder");
