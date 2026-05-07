@@ -40,10 +40,10 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully");
     }
 
-    @PostMapping("/import-teachers")
+    @PostMapping("/import-users")
     public ResponseEntity<CsvImportResult> importTeachers(@RequestParam("file") MultipartFile file)
     {
-        CsvImportResult result=userService.importTeachersFromCsv(file);
+        CsvImportResult result=userService.importUsersFromCsv(file);
         return ResponseEntity.ok(result);
     }
 }

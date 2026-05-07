@@ -1,17 +1,16 @@
 package com.portal.teachercontentportal.service;
 
+import com.portal.teachercontentportal.model.Branch;
 import com.portal.teachercontentportal.model.User;
+import com.portal.teachercontentportal.model.Year;
 import com.portal.teachercontentportal.repository.UserRepository;
-import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.springframework.stereotype.Service;
 import com.portal.teachercontentportal.dto.CsvImportResult;
 import com.portal.teachercontentportal.model.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.channels.UnresolvedAddressException;
 import java.nio.charset.StandardCharsets;
 
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class UserService {
          userRepository.deleteById(id);
      }
 
-    public CsvImportResult importTeachersFromCsv(MultipartFile file)
+    public CsvImportResult importUsersFromCsv(MultipartFile file)
     {
         if(file.isEmpty())
         {
@@ -56,8 +55,10 @@ public class UserService {
         {
             String line;
             boolean firstLine=true;
+            int lineNumber=0;
             while((line= reader.readLine())!=null)
             {
+                lineNumber+=1;
                 if(firstLine)
                 {
                     firstLine=false;
@@ -68,18 +69,29 @@ public class UserService {
                     continue;
                 }
                 String[] parts=line.split(",", -1);
-                if(parts.length<2)
+                if(parts.length<3)
                 {
-                    errors.add("Invalid row: "+line);
+                    errors.add("Invalid row: "+lineNumber);
                     continue;
                 }
 
                 String userId=parts[0].trim();
                 String password=parts[1].trim();
+                String roleText=parts[2].trim();
 
-                if(userId.isEmpty() || password.isEmpty())
+                if(userId.isEmpty())
                 {
-                    errors.add("Missing serId/password at line: "+line);
+                    errors.add("Missing userId at line: "+lineNumber);
+                    continue;
+                }
+                if(password.isEmpty())
+                {
+                    errors.add("Missing password at line: "+lineNumber);
+                    continue;
+                }
+                if(roleText.isEmpty())
+                {
+                    errors.add("Missing role at line: "+lineNumber);
                     continue;
                 }
 
@@ -88,11 +100,59 @@ public class UserService {
                     errors.add("User already exsist: "+userId);
                     continue;
                 }
-                User teacher=new User();
-                teacher.setUserId(userId);
-                teacher.setPassword(passwordEncoder.encode(password));
-                teacher.setRole(Role.TEACHER);
-                userRepository.save(teacher);
+
+                Role role;
+                try{
+                    role=Role.valueOf(roleText.toUpperCase());
+                }
+                catch (Exception e){
+                    errors.add("Invalid role at line: "+lineNumber);
+                    continue;
+                }
+                if(role==Role.ADMIN)
+                {
+                    errors.add("ADMIN cannot be imported from CSV at line: "+lineNumber);
+                    continue;
+                }
+                User user=new User();
+                user.setUserId(userId);
+                user.setPassword(passwordEncoder.encode(password));
+                user.setRole(role);
+                if(role==Role.STUDENT)
+                {
+                    if(parts.length<5)
+                    {
+                        errors.add("Incomplete field at: "+lineNumber);
+                        continue;
+                    }
+                    String year=parts[3].trim();
+                    String branch=parts[4].trim();
+                    if(year.isEmpty())
+                    {
+                        errors.add("Missing year at line: "+lineNumber);
+                        continue;
+                    }
+                    if(branch.isEmpty())
+                    {
+                        errors.add("Missing branch at line: "+lineNumber);
+                        continue;
+                    }
+                    try{
+                        user.setYear(Year.valueOf(year.toUpperCase()));
+                    }
+                    catch (Exception e){
+                        errors.add("Invalid year at line: "+lineNumber);
+                        continue;
+                    }
+                    try{
+                        user.setBranch(Branch.valueOf(branch.toUpperCase()));
+                    }
+                    catch (Exception e){
+                        errors.add("Invalid branch at line: "+lineNumber);
+                        continue;
+                    }
+                }
+                userRepository.save(user);
                 successCount+=1;
             }
         }
