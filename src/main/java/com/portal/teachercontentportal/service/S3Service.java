@@ -40,7 +40,7 @@ public class S3Service {
                     putRequest,
                     software.amazon.awssdk.core.sync.RequestBody.fromBytes(file.getBytes())
         );
-            return fileName;
+            return generatePresignedUrl(fileName);
         }
         catch(Exception e)
         {

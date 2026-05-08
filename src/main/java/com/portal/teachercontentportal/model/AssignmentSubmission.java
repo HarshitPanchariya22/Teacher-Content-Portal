@@ -26,7 +26,7 @@ public class AssignmentSubmission {
     @JoinColumn(name = "student_id", nullable = false)
     private User student;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String fileUrl;
 
     @Column(nullable = false)
