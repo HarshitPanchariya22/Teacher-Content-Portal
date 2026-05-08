@@ -1,4 +1,5 @@
 /* studentdashboard.css */
+
 * {
     margin: 0;
     padding: 0;
@@ -13,6 +14,7 @@ body {
 }
 
 /* Header */
+
 header {
     background: linear-gradient(90deg, #111827, #1e2d5a);
     color: white;
@@ -52,6 +54,7 @@ header {
 }
 
 /* Main Container */
+
 .container {
     max-width: 1000px;
     margin: 28px auto;
@@ -67,6 +70,7 @@ header {
 }
 
 /* Folder Grid */
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -74,6 +78,7 @@ header {
 }
 
 /* Folder Card */
+
 .card {
     background: white;
     border-radius: 18px;
@@ -81,7 +86,7 @@ header {
     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
     transition: 0.3s;
     border: 1px solid #e2e8f0;
-    border-top: 3px solid #8b1a1a;
+    border-top: 3px solid #2563eb;
 }
 
 .card:hover {
@@ -90,8 +95,8 @@ header {
 }
 
 .card.active {
-    border-color: rgba(139, 26, 26, 0.35);
-    box-shadow: 0 12px 26px rgba(139, 26, 26, 0.12);
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.12);
 }
 
 .card h3 {
@@ -106,10 +111,12 @@ header {
     font-size: 14px;
 }
 
+/* Open Folder Button */
+
 .openBtn {
     margin-top: 14px;
     width: 100%;
-    background: #8b1a1a;
+    background: linear-gradient(90deg, #2563eb, #1d4ed8);
     color: white;
     border: none;
     padding: 11px;
@@ -120,11 +127,12 @@ header {
 }
 
 .openBtn:hover {
-    background: #6f1414;
+    background: linear-gradient(90deg, #1d4ed8, #1e40af);
     transform: translateY(-1px);
 }
 
 /* Files */
+
 #files {
     display: grid;
     gap: 14px;
@@ -137,7 +145,9 @@ header {
     border-radius: 14px;
     border: 1px solid #dbe4ef;
     box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
 }
 
 .file:hover {
@@ -183,6 +193,7 @@ header {
 }
 
 /* Assignments */
+
 .assignment-card {
     background: white;
     border-radius: 16px;
@@ -281,6 +292,7 @@ header {
 }
 
 /* Empty State */
+
 .empty {
     background: #f1f5f9;
     border: 2px dashed #94a3b8;
@@ -300,6 +312,7 @@ header {
 }
 
 /* Divider */
+
 hr {
     border: none;
     height: 1px;
@@ -307,11 +320,14 @@ hr {
     margin: 28px 0;
 }
 
+/* Animation */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
         transform: translateY(14px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
