@@ -1,5 +1,6 @@
 let folderId = null;
 let currentTab = "content";
+let fileIdPendingDelete = null;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -147,17 +148,27 @@ async function uploadFile() {
 }
 
 async function deleteFile(id) {
-    const ok = confirm("Delete this file?");
-    if (!ok) return;
+    fileIdPendingDelete = id;
+    document.getElementById("deleteConfirmModal").style.display = "flex";
+}
 
-    const res = await fetch("/content/delete/" + id, {
+function closeDeleteConfirmModal() {
+    fileIdPendingDelete = null;
+    document.getElementById("deleteConfirmModal").style.display = "none";
+}
+
+async function confirmDeleteFile() {
+    if (!fileIdPendingDelete) return;
+
+    const res = await fetch("/content/delete/" + fileIdPendingDelete, {
         method: "DELETE",
         headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
         }
     });
-
+IT
     if (res.ok) {
+        closeDeleteConfirmModal();
         loadFiles();
     } else {
         alert("Delete failed");
@@ -307,6 +318,7 @@ function viewSubmissions(id) {
 window.onclick = function (e) {
     const uploadModal = document.getElementById("uploadModal");
     const assignmentModal = document.getElementById("assignmentModal");
+    const deleteConfirmModal = document.getElementById("deleteConfirmModal");
 
     if (e.target === uploadModal) {
         closeUploadModal();
@@ -314,5 +326,9 @@ window.onclick = function (e) {
 
     if (e.target === assignmentModal) {
         closeAssignmentModal();
+    }
+
+    if (e.target === deleteConfirmModal) {
+        closeDeleteConfirmModal();
     }
 };

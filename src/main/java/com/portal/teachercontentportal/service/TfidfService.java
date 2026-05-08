@@ -35,15 +35,21 @@ public class TfidfService {
     {
         Map<String,Double>idf = new HashMap<>();
         int totalDocs = document.size();
-        Set<String>vocabulary = new HashSet<>();
+        List<Set<String>> docSet = new ArrayList<>();
         for(List<String>doc: document)
+        {
+            docSet.add(new HashSet<>(doc));
+        }
+
+        Set<String>vocabulary = new HashSet<>();
+        for(Set<String>doc: docSet)
         {
             vocabulary.addAll(doc);
         }
         for(String word : vocabulary)
         {
             int count = 0;
-            for(List<String> doc : document)
+            for(Set<String> doc : docSet)
             {
                 if(doc.contains(word))
                 {

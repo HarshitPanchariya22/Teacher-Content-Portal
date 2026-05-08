@@ -67,6 +67,7 @@ public class S3Service {
                     .bucket(bucketName)
                     .key(key)
                     .build();
+            s3Client.deleteObject(deleteRequest);
         }
         catch (Exception e)
         {
@@ -75,6 +76,25 @@ public class S3Service {
     }
     public String extractKeyFromUrl(String url)
     {
-        return url.substring(url.indexOf(".com/")+5);
+        if (url == null || url.isBlank()) {
+            throw new RuntimeException("Invalid file key/url");
+        }
+
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return url;
+        }
+
+        String withoutQuery = url.split("\\?")[0];
+        int markerIndex = withoutQuery.indexOf(".com/");
+        if (markerIndex >= 0) {
+            return withoutQuery.substring(markerIndex + 5);
+        }
+
+        int pathStart = withoutQuery.indexOf('/', withoutQuery.indexOf("://") + 3);
+        if (pathStart >= 0 && pathStart + 1 < withoutQuery.length()) {
+            return withoutQuery.substring(pathStart + 1);
+        }
+
+        throw new RuntimeException("Unable to extract S3 key from url");
     }
 }
